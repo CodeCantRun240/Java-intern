@@ -1,0 +1,24 @@
+
+
+services:
+  postgres-lmao:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_DB: db-lmao
+      POSTGRES_USER: user0
+      POSTGRES_PASSWORD: 240240
+    ports:
+      - "5432:5432"
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin_1
+    restart: always
+    ports:
+      - "8081:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: nguyenngockhanh240@gmail.com
+      PGADMIN_DEFAULT_PASSWORD: (N0pe.avi240)
+    depends_on:
+      - postgres-lmao  # optional, if you're managing both via Docker Compose

@@ -1,0 +1,23 @@
+
+
+services:
+  postgresbookingdb:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_DB: bookingdb
+      POSTGRES_USER: user0
+      POSTGRES_PASSWORD: 240240
+    ports:
+      - "5432:5432"
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadminbooking
+    restart: always
+    ports:
+      - "8082:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: nguyenngockhanh240@gmail.com
+      PGADMIN_DEFAULT_PASSWORD: N0pe.avi240
+

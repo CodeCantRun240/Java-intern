@@ -2,11 +2,12 @@ package backend.model;
 
 
 import jakarta.persistence.*;
+
 import java.time.ZonedDateTime;
 
 @Entity
 @Table(name = "user_info")
-public class CreateUser {
+public class CreateUser1 {
 
 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -39,8 +40,8 @@ public class CreateUser {
     @Column(name = "updated_at")
     private ZonedDateTime updatedAt;
 
-    //@Column(name = "deleted")
-   //    private Boolean deleted;
+    @Column(name = "deleted")
+    private Boolean deleted;
 
     public Long getUserId() {
         return userId;
@@ -116,11 +117,11 @@ public class CreateUser {
         this.updatedAt = updatedAt;
     }
 
-    //public Boolean getDeleted() {
-    //    return deleted;
-   // }
+    public Boolean getDeleted(Boolean deleted) {
+        return deleted;
+    }
 
-   //public void setDeleted(Boolean deleted) {
-    //    this.deleted = deleted;
-   // }
+    public void setDeleted(Boolean deleted) {
+        this.deleted = deleted;
+    }
 }

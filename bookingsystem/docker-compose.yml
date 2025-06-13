@@ -11,6 +11,7 @@ services:
     ports:
       - "5432:5432"
 
+
   pgadmin:
     image: dpage/pgadmin4
     container_name: pgadminbooking
@@ -21,3 +22,30 @@ services:
       PGADMIN_DEFAULT_EMAIL: nguyenngockhanh240@gmail.com
       PGADMIN_DEFAULT_PASSWORD: N0pe.avi240
 
+  crafter-authoring:
+    image: craftercms/authoring_tomcat:latest
+    container_name: crafter-authoring
+    ports:
+      - "8085:8080"
+    volumes:
+      - crafter-data:/opt/crafter/data
+    networks:
+      - crafter-net
+
+  crafter-delivery:
+    image: craftercms/delivery:latest
+    container_name: crafter-delivery
+    ports:
+      - "8086:8080"
+    volumes:
+      - crafter-data:/opt/crafter/data
+    depends_on:
+      - crafter-authoring
+    networks:
+      - crafter-net
+
+volumes:
+  crafter-data:
+
+networks:
+  crafter-net:

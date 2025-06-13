@@ -1,49 +1,58 @@
 package backend.controller;
+
 import backend.dto.EntityDTO;
 import backend.model.CreateUser;
 import backend.repository.UserRepository;
 import backend.service.UserService;
-
-import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
-import backend.mapper.GetUserMapper;
-
-
 
 @RestController
-public class UserController {
-
-    @Autowired
-    private GetUserMapper userMapper;
+public class UserController1 {
 
     private final UserRepository userRepository;
     private final UserService userService;
 
-    public UserController(UserRepository userRepository, UserService userService) {
+    public UserController1(UserRepository userRepository, UserService userService) {
         this.userRepository = userRepository;
         this.userService = userService;
     }
 
-    @PostMapping("/create-users")
-    public EntityDTO createUser(@Valid @RequestBody EntityDTO entityDTO) {
-        CreateUser createUser = userMapper.toEntity(entityDTO);
+    @RequestMapping("/create-users")
+    @PostMapping
+    public CreateUser createUser(@RequestBody EntityDTO entityDTO) {
+        CreateUser createUser = new CreateUser();
+        createUser.setUserName(entityDTO.getUserName());
+        createUser.setPassword(entityDTO.getPassword());
+        createUser.setEmail(entityDTO.getEmail());
+        createUser.setPhoneNumber(entityDTO.getPhoneNumber());
+        createUser.setPosition(entityDTO.getPosition());
         createUser.setCreatedAt(ZonedDateTime.now());
         createUser.setUpdatedAt(ZonedDateTime.now());
         createUser.setScheduleNo(0);
+        CreateUser user = userRepository.save(createUser);
 
-        CreateUser savedUser = userRepository.save(createUser);
-        return userMapper.toDTO(savedUser);
+        return user;
     }
 
     @GetMapping("/all-users")
     public List<EntityDTO> getUsers() {
-        List<CreateUser> users = userRepository.findAll();
-        return userMapper.toDTOList(users);
+        return userRepository.findAll().stream().map(user -> {
+            EntityDTO dto = new EntityDTO();
+            dto.setUserId(user.getUserId());
+            dto.setUserName(user.getUserName());
+            dto.setEmail(user.getEmail());
+            dto.setPhoneNumber(user.getPhoneNumber());
+            dto.setPosition(user.getPosition());
+            dto.setCreatedAt(user.getCreatedAt());
+            dto.setUpdatedAt(user.getUpdatedAt());
+            dto.setScheduleNo(user.getScheduleNo());
+            return dto;
+        }).collect(Collectors.toList());
     }
 
     @PatchMapping("/update-users")
@@ -62,7 +71,6 @@ public class UserController {
         userRepository.deleteById(userId);
         return ResponseEntity.noContent().build(); // 204 No Content
     }
-
 }
 
 

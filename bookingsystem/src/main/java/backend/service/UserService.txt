@@ -1,0 +1,40 @@
+package backend.service;
+
+import backend.model.CreateUser;
+import backend.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+@Service
+public class UserService2 {
+    @Autowired
+    private UserRepository userRepository;
+
+    public CreateUser updateUser(Long userId, CreateUser updateUser) {
+        return userRepository.findById(userId).map(user -> {
+            if (updateUser.getUserName() != null) {
+                user.setUserName(updateUser.getUserName());
+            }
+
+            if (updateUser.getEmail() != null) {
+                user.setEmail(updateUser.getEmail());
+            }
+
+            if (updateUser.getPassword() != null) {
+                user.setPassword(updateUser.getPassword());
+            }
+
+            if (updateUser.getPosition() != null) {
+                user.setPosition(updateUser.getPosition());
+            }
+
+            if (updateUser.getPhoneNumber() != null) {
+                user.setPhoneNumber(updateUser.getPhoneNumber());
+            }
+
+
+
+            return userRepository.save(user);
+        }).orElseThrow(() -> new RuntimeException("User not found"));
+    }
+}

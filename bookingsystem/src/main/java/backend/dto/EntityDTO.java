@@ -1,23 +1,49 @@
 package backend.dto;
 
+import backend.validation.RepetitiveValidator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+
 import java.time.ZonedDateTime;
 
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class EntityDTO {
+    private Long userId;
+
+    @NotBlank(message = "userName must not be empty")
     private String userName;
 
+    @RepetitiveValidator
+    @Email(message = "Email format is invalid")
+    @NotBlank(message = "Email must not be empty")
     private String email;
 
+    @Size(min = 6, message = "Password must be at least 6 characters")
     private String password;
 
+    @NotBlank(message = "position must not be empty")
     private String position;
+
 
     private Integer scheduleNo;
 
+    @NotNull(message = "phoneNumber must not be empty")
     private Long phoneNumber;
 
     private ZonedDateTime createdAt;
 
     private ZonedDateTime updatedAt;
+
+    @JsonIgnore
+    private Boolean deleted;
+
+    public Long getUserId() { return userId; }
+
+    public void setUserId(Long user_id) { this.userId = user_id; }
 
     public String getUserName() {
         return userName;
@@ -82,4 +108,6 @@ public class EntityDTO {
     public void setUpdatedAt(ZonedDateTime updatedAt) {
         this.updatedAt = updatedAt;
     }
+
+
 }

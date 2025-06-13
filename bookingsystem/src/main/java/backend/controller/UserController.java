@@ -18,13 +18,14 @@ import backend.mapper.GetUserMapper;
 @RestController
 public class UserController {
 
-    @Autowired
+   
     private GetUserMapper userMapper;
 
     private final UserRepository userRepository;
     private final UserService userService;
 
     public UserController(UserRepository userRepository, UserService userService) {
+
         this.userRepository = userRepository;
         this.userService = userService;
     }

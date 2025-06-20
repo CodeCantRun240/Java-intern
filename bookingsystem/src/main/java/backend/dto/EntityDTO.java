@@ -1,5 +1,6 @@
 package backend.dto;
 
+import backend.model.CreateUser;
 import backend.validation.RepetitiveValidator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -7,11 +8,14 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.time.ZonedDateTime;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class EntityDTO {
+    private static final Logger log = LoggerFactory.getLogger(EntityDTO.class);
     private Long userId;
 
     @NotBlank(message = "userName must not be empty")
@@ -86,11 +90,13 @@ public class EntityDTO {
     }
 
     public Long getPhoneNumber() {
+        log.debug("Got the phone number: " + phoneNumber);
         return phoneNumber;
     }
 
     public void setPhoneNumber(Long phoneNumber) {
         this.phoneNumber = phoneNumber;
+        log.debug("Got the phone number: " + phoneNumber);
     }
 
     public ZonedDateTime getCreatedAt() {

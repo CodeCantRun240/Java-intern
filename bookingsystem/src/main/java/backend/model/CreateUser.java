@@ -2,11 +2,15 @@ package backend.model;
 
 
 import jakarta.persistence.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.time.ZonedDateTime;
 
 @Entity
 @Table(name = "user_info")
 public class CreateUser {
+    private static final Logger log = LoggerFactory.getLogger(CreateUser.class);
 
 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -93,11 +97,14 @@ public class CreateUser {
     }
 
     public Long getPhoneNumber() {
+        log.debug("Got the fucking phone number: " + phoneNumber);
         return phoneNumber;
+
     }
 
     public void setPhoneNumber(Long phoneNumber) {
         this.phoneNumber = phoneNumber;
+
     }
 
     public ZonedDateTime getCreatedAt() {

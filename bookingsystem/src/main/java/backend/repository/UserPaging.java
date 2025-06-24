@@ -20,9 +20,12 @@ public interface UserPaging extends JpaRepository<CreateUser, Long> {
             countQuery = """
            SELECT COUNT(*) FROM user_info 
            WHERE (:position IS NULL OR LOWER(position) = LOWER(:position)) 
+            
              AND (:user_name IS NULL OR LOWER(user_name) = LOWER(:user_name))
            """,
+
             nativeQuery = true
+
     )
     Page<CreateUser> findBy(
             @Param("position") String position,

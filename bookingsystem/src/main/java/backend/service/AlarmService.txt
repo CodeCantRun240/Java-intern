@@ -1,0 +1,63 @@
+package backend.service;
+
+import backend.dto.AlarmDTO;
+import backend.model.AlarmEntity;
+import backend.repository.AlarmRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+@Service
+public class AlarmService {
+
+    @Autowired
+    private AlarmRepository alarmRepository;
+
+    public List<AlarmDTO> getAllAlarms() {
+        return alarmRepository.findAll().stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
+    }
+
+    public Optional<AlarmDTO> getAlarmById(Long id) {
+        return alarmRepository.findById(id).map(this::convertToDTO);
+    }
+
+    public AlarmDTO createAlarm(AlarmDTO dto) {
+        AlarmEntity entity = convertToEntity(dto);
+        AlarmEntity saved = alarmRepository.save(entity);
+        return convertToDTO(saved);
+    }
+
+    public Optional<AlarmDTO> updateAlarm(Long id, AlarmDTO dto) {
+        return alarmRepository.findById(id).map(existing -> {
+            existing.setAlarmId(dto.getAlarmId());
+            existing.setAlarmTime(dto.getAlarmTime());
+            existing.setNoteId(dto.getNoteId());
+            return convertToDTO(alarmRepository.save(existing));
+        });
+    }
+
+    public void deleteAlarm(Long id) {
+        alarmRepository.deleteById(id);
+    }
+
+    private AlarmDTO convertToDTO(AlarmEntity entity) {
+        AlarmDTO dto = new AlarmDTO();
+        dto.setAlarmId(entity.getAlarmId());
+        dto.setAlarmTime(entity.getAlarmTime());
+        dto.setNoteId(entity.getNoteId());
+        return dto;
+    }
+
+    private AlarmEntity convertToEntity(AlarmDTO dto) {
+        AlarmEntity entity = new AlarmEntity();
+        entity.setAlarmId(dto.getAlarmId());
+        entity.setAlarmTime(dto.getAlarmTime());
+        entity.setNoteId(dto.getNoteId());
+        return entity;
+    }
+}

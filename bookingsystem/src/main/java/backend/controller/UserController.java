@@ -1,20 +1,28 @@
 package backend.controller;
 import backend.dto.EntityDTO;
+import backend.dto.NoteWithAlarmsDTO;
+import backend.model.CreateNote;
 import backend.model.CreateUser;
 import backend.repository.UserRepository;
 import backend.repository.UserPaging;
+import backend.service.NoteWithAlarmsService;
 import backend.service.UserService;
+import backend.repository.NoteRepository;
+import backend.repository.UserRepository;
+import backend.service.NoteWithAlarmsService;
 
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.time.ZonedDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
+
+
 import backend.mapper.GetUserMapper;
 
 
@@ -29,11 +37,14 @@ public class UserController {
     private final UserRepository userRepository;
     private final UserService userService;
     private UserPaging userPaging;
+    @Autowired
+    private NoteWithAlarmsService noteWithAlarmsService;
 
 
-    public UserController(UserRepository userRepository, UserService userService, UserPaging userPaging) {
+    public UserController(UserRepository userRepository, NoteWithAlarmsService noteWithAlarmsService, UserService userService, UserPaging userPaging) {
 
         this.userRepository = userRepository;
+        this.noteWithAlarmsService = noteWithAlarmsService;
         this.userService = userService;
         this.userPaging = userPaging;
     }
@@ -46,6 +57,7 @@ public class UserController {
         createUser.setScheduleNo(0);
 
         CreateUser savedUser = userRepository.save(createUser);
+
         return userMapper.toDTO(savedUser);
     }
 
@@ -77,12 +89,18 @@ public class UserController {
             @RequestParam(required = false) String position,
             @RequestParam(required = false) String user_name,
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size
+            @RequestParam(defaultValue = "3") int size,
+            @RequestParam(defaultValue = "created_at,desc") String[] sort
     ) {
+        Sort sortOrder = Sort.by(Sort.Direction.fromString(sort[1]), sort[0]);
         Pageable pageable = PageRequest.of(page, size);
         Page<CreateUser> users = userPaging.findBy(position, user_name, pageable);
         return users.map(userMapper::toDTO);
     }
+
+
+
+
 }
 
 

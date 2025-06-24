@@ -1,11 +1,12 @@
 package backend.model;
-
+import backend.model.CreateNote;
 
 import jakarta.persistence.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.time.ZonedDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "user_info")
@@ -97,7 +98,7 @@ public class CreateUser {
     }
 
     public Long getPhoneNumber() {
-        log.debug("Got the fucking phone number: " + phoneNumber);
+        log.debug("Got the phone number: " + phoneNumber);
         return phoneNumber;
 
     }
@@ -130,4 +131,14 @@ public class CreateUser {
    //public void setDeleted(Boolean deleted) {
     //    this.deleted = deleted;
    // }
+   @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+   private List<CreateNote> notes;
+
+    public List<CreateNote> getNotes() {
+        return notes;
+    }
+
+    public void setNotes(List<CreateNote> notes) {
+        this.notes = notes;
+    }
 }

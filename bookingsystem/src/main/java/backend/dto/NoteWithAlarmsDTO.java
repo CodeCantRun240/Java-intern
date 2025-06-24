@@ -1,11 +1,10 @@
 package backend.dto;
 
-
 import java.util.List;
 
-public class NoteDTO {
-
+public class NoteWithAlarmsDTO {
     private String noteContent;
+    private List<AlarmDTO> alarms;
 
     public String getNoteContent() {
         return noteContent;
@@ -14,8 +13,6 @@ public class NoteDTO {
     public void setNoteContent(String noteContent) {
         this.noteContent = noteContent;
     }
-
-    private List<AlarmDTO> alarms;
 
     public List<AlarmDTO> getAlarms() {
         return alarms;
